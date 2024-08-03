@@ -9,4 +9,6 @@
 3. Clone ```.env.template``` file and rename it to ```.env```
 4. Change environment varibles
 5. Up DB ```docker-compose up -d```
-6. Run app: ```npm run start:dev```
+6. Execute SEED
+   ```http://localhost:3000/api/seed```
+7. Run app: ```npm run start:dev```
