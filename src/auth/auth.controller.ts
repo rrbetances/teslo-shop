@@ -6,6 +6,9 @@ import { User } from './entities/user.entity';
 import { GetUser } from './decorators/get-user.decorator';
 import { GetRawHeaderDecorator } from './decorators/get-raw-headers.decorator';
 import { UserRoleGuard } from './guards/user-role/user-role.guard';
+import { RoleProtected } from './decorators/role-protected.decorator';
+import { ValidRoles } from './interfaces';
+import { Auth } from './decorators';
 
 @Controller('auth')
 export class AuthController {
@@ -20,6 +23,15 @@ export class AuthController {
   async loginUser(@Body() loginUserDto: LoginUserDto) {
     return await this.authService.login(loginUserDto);
   }
+
+   @Auth()
+   @Get('check-auth-status')
+   checkAuthStatus(
+    @GetUser() user : User
+   ){
+    console.log(user)
+    return this.authService.checkAuthStatus(user);
+   }
 
   @Get('private')
   @UseGuards(AuthGuard())
@@ -37,11 +49,24 @@ export class AuthController {
       rawHeaders
     };
   }
-
+  
+  //@SetMetadata('roles', ['admin', 'super-user'])
+  @RoleProtected(ValidRoles.admin, ValidRoles.superUser)
   @Get('private2')
-  @SetMetadata('roles', ['admin', 'super-user'])
   @UseGuards(AuthGuard(), UserRoleGuard)
   testPrivateRouting2(
+    @GetUser() user: User
+  ){
+
+    return {
+      ok: true,
+      user
+    };
+  }
+
+  @Auth(ValidRoles.admin, ValidRoles.superUser)
+  @Get('private3')
+  testPrivateRouting3(
     @GetUser() user: User
   ){
 
