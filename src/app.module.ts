@@ -23,7 +23,7 @@ const fs= require('fs');
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
-      ssl: process.env.STAGE ? {
+      ssl: process.env.STAGE === 'prod' ? {
         ca: fs.readFileSync('ca.pem')
       } : false
     }),
