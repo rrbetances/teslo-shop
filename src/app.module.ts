@@ -9,6 +9,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { MessagesWsModule } from './messages-ws/messages-ws.module';
+const fs= require('fs');
 
 @Module({
   imports: [
@@ -22,6 +23,9 @@ import { MessagesWsModule } from './messages-ws/messages-ws.module';
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
+      ssl: {
+        ca: fs.readFileSync('ca.pem')
+      }
     }),
 
     ServeStaticModule.forRoot({
