@@ -23,9 +23,9 @@ const fs= require('fs');
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
-      ssl: {
+      ssl: process.env.STAGE ? {
         ca: fs.readFileSync('ca.pem')
-      }
+      } : false
     }),
 
     ServeStaticModule.forRoot({
